@@ -47,7 +47,7 @@
             </div>
 
             <div class="checkbox-group">
-                <input type="checkbox" id="newsletter" name="newsletter">
+                <input type="checkbox" id="newsletter" name="subscribed_newsletter">
                 <label for="newsletter">Đăng ký nhận bản tin khuyến mãi từ Wendy</label>
             </div>
 

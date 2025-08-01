@@ -9,7 +9,7 @@ $password = $_POST['password'];
 $confirm = $_POST['confirm_password'];
 
 $is_student = isset($_POST['student']) ? 1 : 0;
-$subscribe = isset($_POST['newsletter']) ? 1 : 0;
+$subscribed_newsletter = isset($_POST['subscribed_newsletter']) ? 1 : 0;
 
 if ($password !== $confirm) {
     die("Mật khẩu không khớp!");
@@ -28,7 +28,7 @@ try {
     }
 
     //Insert nếu không trùng
-    $stmt = $pdo->prepare("INSERT INTO users (username, password, fullname, email, phone, dob, role, is_student, subscribe) 
+    $stmt = $pdo->prepare("INSERT INTO users (username, password, fullname, email, phone, dob, role, is_student, subscribed_newsletter) 
                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->execute([
         $phone,
@@ -39,7 +39,7 @@ try {
         $dob,
         'user',
         $is_student,
-        $subscribe
+        $subscribed_newsletter
     ]);
 
     echo "Đăng ký thành công!";
