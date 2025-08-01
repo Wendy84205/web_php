@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header('Location: login.php');
     exit();
@@ -20,15 +19,15 @@ $totalOrders = $stmt->fetch()['total_orders'];
 $stmt = $pdo->query("SELECT COUNT(*) AS total_users FROM users");
 $totalUsers = $stmt->fetch()['total_users'];
 
-// ✅ Tổng doanh thu (đơn hàng đã giao hàng)
-$stmt = $pdo->query("SELECT SUM(total_amount) AS total_revenue FROM orders WHERE status = 'Đã giao hàng'");
+// Tổng doanh thu (đơn hàng đã giao hàng)
+$stmt = $pdo->query("SELECT SUM(total_amount) AS total_revenue FROM orders WHERE status = 'completed'");
 $totalRevenue = $stmt->fetch()['total_revenue'] ?? 0;
 
-// ✅ Doanh thu theo tháng (chỉ tính đơn hàng đã hoàn thành)
+// Doanh thu theo tháng (chỉ tính đơn hàng đã hoàn thành)
 $stmt = $pdo->query("
     SELECT MONTH(created_at) AS month, SUM(total_amount) AS total 
     FROM orders 
-    WHERE status = 'Đã giao hàng' 
+    WHERE status = 'completed' 
     GROUP BY MONTH(created_at) 
     ORDER BY MONTH(created_at)
 ");
@@ -92,11 +91,10 @@ while ($row = $stmt->fetch()) {
                 <a href="products/products.php"><i class="fas fa-box"></i> Products</a>
                 <a href="orders/orders.php"><i class="fas fa-shopping-cart"></i> Orders</a>
                 <a href="users/users.php"><i class="fas fa-users"></i> Users</a>
-                <a href="review/review.php"><i class="fas fa-star"></i> Review</a>
+                <a href="review.php"><i class="fas fa-star"></i> Review</a>
                 <a href="categories/categories.php"><i class="fas fa-tags"></i> Categories</a>
                 <a href="logout.php"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
             </div>
-
 
             <!-- Main -->
             <div class="col-md-10">

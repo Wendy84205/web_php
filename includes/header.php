@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once 'includes/db.php'; // ✅ Đảm bảo đúng path đến db.php
+require_once 'includes/db.php'; 
 
 $cartCount = 0;
 $isLoggedIn = isset($_SESSION['user_id']);
@@ -32,31 +32,35 @@ $categories = $stmt->fetchAll();
 </head>
 
 <body data-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
-
     <header class="top-header">
         <div class="top-header-container">
             <a href="index.php" class="logo"><img src="assets/images/logo.png" alt="Wendy"></a>
-
             <div class="dropdown category-menu">
                 <?php
                 $currentPage = basename($_SERVER['PHP_SELF']);
-                $hideCategoryMenu = in_array($currentPage, ['category.php', 'product-detail.php']);
+                $hideCategoryMenu = in_array($currentPage, ['category.php', 'product-detail.php', 'cart.php']);
                 ?>
-
                 <?php if (!$hideCategoryMenu): ?>
                     <div class="dropdown category-menu">
-                        <button class="menu-btn dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fas fa-bars"></i> <span>Danh mục</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <?php foreach ($categories as $category): ?>
-                                <li>
-                                    <a class="dropdown-item" href="category.php?id=<?= $category['id'] ?>">
-                                        <i class="fas fa-utensils me-1"></i> <?= htmlspecialchars($category['name']) ?>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <?php if (!$hideCategoryMenu): ?>
+                            <button class="menu-btn dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fas fa-bars"></i> <span>Danh mục</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <?php foreach ($categories as $category): ?>
+                                    <li>
+                                        <a class="dropdown-item" href="category.php?id=<?= $category['id'] ?>">
+                                            <i class="fas fa-utensils me-1"></i> <?= htmlspecialchars($category['name']) ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <!-- Hiển thị nút back thay thế khi ở trang cần ẩn danh mục -->
+                            <a href="javascript:history.back()" class="menu-btn back-btn">
+                                <i class="fas fa-arrow-left"></i> <span>Quay lại</span>
+                            </a>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
 

@@ -68,7 +68,7 @@ $users = $stmt->fetchAll();
         <a href="../users/users.php"><i class="fas fa-users me-2"></i> Users</a>
         <a href="../review.php"><i class="fas fa-star me-2"></i> Review</a>
         <a href="categories_list.php" class="active"><i class="fas fa-tags me-2"></i> Categories</a>
-        <a href="../../logout.php"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+        <a href="../logout.php"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
     </div>
 
     <div class="container py-5">

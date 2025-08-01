@@ -25,17 +25,29 @@ if (!$order) {
     exit;
 }
 
+// Kiểm tra định nghĩa cột status trong database
+$stmt = $pdo->query("SHOW COLUMNS FROM orders LIKE 'status'");
+$status_column = $stmt->fetch();
+
+// Lấy các giá trị ENUM hợp lệ từ database
+preg_match("/^enum\(\'(.*)\'\)$/", $status_column['Type'], $matches);
+$allowed_statuses = explode("','", $matches[1]);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = $_POST['status'] ?? '';
 
-    if (!in_array($status, ['Chờ xử lý', 'Đã xử lý', 'Đã giao hàng', 'Đã hủy'])) {
-        $error = '⚠️ Trạng thái không hợp lệ';
+    if (!in_array($status, $allowed_statuses)) {
+        $error = '⚠️ Trạng thái không hợp lệ. Chỉ chấp nhận: ' . implode(', ', $allowed_statuses);
     } else {
-        $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
-        $stmt->execute([$status, $order_id]);
-        $_SESSION['success'] = "✅ Cập nhật trạng thái đơn hàng thành công!";
-        header("Location: orders.php");
-        exit;
+        try {
+            $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
+            $stmt->execute([$status, $order_id]);
+            $_SESSION['success'] = "✅ Cập nhật trạng thái đơn hàng thành công!";
+            header("Location: orders.php");
+            exit;
+        } catch (PDOException $e) {
+            $error = '⚠️ Lỗi khi cập nhật: ' . $e->getMessage();
+        }
     }
 }
 ?>
@@ -46,6 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>Cập nhật đơn hàng</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .status-pending { color: #ffc107; }
+        .status-processing { color: #0d6efd; }
+        .status-shipped { color: #fd7e14; }
+        .status-completed { color: #198754; }
+        .status-cancelled { color: #dc3545; }
+    </style>
 </head>
 <body class="bg-light">
 <div class="container py-5">
@@ -59,11 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="mb-3">
             <label class="form-label">Trạng thái đơn hàng</label>
             <select name="status" class="form-select">
-                <?php
-                $statuses = ['Chờ xử lý', 'Đã xử lý', 'Đã giao hàng', 'Đã hủy'];
-                foreach ($statuses as $s):
-                ?>
-                    <option value="<?= $s ?>" <?= $order['status'] === $s ? 'selected' : '' ?>><?= $s ?></option>
+                <?php foreach ($allowed_statuses as $status): ?>
+                    <option value="<?= $status ?>" 
+                            class="status-<?= strtolower(str_replace(' ', '-', $status)) ?>"
+                            <?= $order['status'] === $status ? 'selected' : '' ?>>
+                        <?= $status ?>
+                    </option>
                 <?php endforeach ?>
             </select>
         </div>

@@ -30,7 +30,7 @@ $products = $stmt->fetchAll();
                     $categories = $catStmt->fetchAll();
                     foreach ($categories as $cat):
                         ?>
-                        <a href="category.php?id=<?= $cat['id'] ?>" class="nav-category-item">
+                        <a href="categories_sidebar?id=<?= $cat['id'] ?>" class="nav-category-item">
                             <i class="fas fa-utensils"></i>
                             <span><?= htmlspecialchars($cat['name']) ?></span>
                         </a>

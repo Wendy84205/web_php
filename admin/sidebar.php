@@ -1,5 +1,5 @@
 <div class="d-flex flex-column p-3 bg-dark text-white" style="height: 100vh; width: 250px;">
-    <h3 class="mb-4">🧠 <strong>Wendy</strong></h3>
+    <h3 class="mb-4"><strong>Wendy</strong></h3>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
             <a href="dashboard.php" class="nav-link text-white">
@@ -32,12 +32,7 @@
             </a>
         </li>
         <li>
-            <a href="export/export_menu.php" class="nav-link text-white">
-                <i class="fas fa-file-export me-2"></i> Export
-            </a>
-        </li>
-        <li>
-            <a href="../logout.php" class="nav-link text-white">
+            <a href="logout.php" class="nav-link text-white">
                 <i class="fas fa-sign-out-alt me-2"></i> Logout
             </a>
         </li>

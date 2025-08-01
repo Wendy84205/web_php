@@ -1,7 +1,6 @@
 <?php
 session_start();
-require_once 'db.php'; // ✅ đúng vì db.php nằm cùng thư mục
-
+require_once 'db.php'; 
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
